@@ -1,11 +1,11 @@
 USE [SSIS_PDS]
 GO
 
-/****** Object:  StoredProcedure [dbo].[usp_LoadSSISConfigurations]    Script Date: 11/10/2019 12:27:40 AM ******/
+/****** Object:  StoredProcedure [dbo].[usp_LoadSSISConfigurations]    Script Date: 3/4/2020 6:56:09 PM ******/
 DROP PROCEDURE [dbo].[usp_LoadSSISConfigurations]
 GO
 
-/****** Object:  StoredProcedure [dbo].[usp_LoadSSISConfigurations]    Script Date: 11/10/2019 12:27:40 AM ******/
+/****** Object:  StoredProcedure [dbo].[usp_LoadSSISConfigurations]    Script Date: 3/4/2020 6:56:09 PM ******/
 SET ANSI_NULLS ON
 GO
 
@@ -24,7 +24,7 @@ MODIFICATION LOG:
 Ver      Date        Author           Description
 -------  ----------  ---------------  ------------------------------------------------------------------------
 1.0      11/03/2019  JJAUSSI          1. Created this process for LDS BC IT243
-
+1.1      02/04/2020  JMueras          1. Added conn_DFNB3
 
 
 RUNTIME: 
@@ -43,70 +43,87 @@ Connect strings are loaded with passwords to allow for automation of SSIS ETL ba
          
 ******************************************************************************************************************/
 
-    TRUNCATE TABLE dbo.[SSIS Configurations];
+        TRUNCATE TABLE dbo.[SSIS Configurations];
+
+        -- 1) Common Configurations
+
+        DELETE FROM dbo.[SSIS Configurations]
+        WHERE ConfigurationFilter = 'CommonConfigurations';
+
+        -- 1.1) conn_EXM
+
+        INSERT INTO dbo.[SSIS Configurations]
+        (ConfigurationFilter, 
+         ConfiguredValue, 
+         PackagePath, 
+         ConfiguredValueType
+        )
+        VALUES
+        ('CommonConfigurations', 
+         'Data Source=localhost;Initial Catalog=EXM;Provider=SQLNCLI11;Integrated Security=SSPI;', 
+         '\Package.Variables[User::conn_EXM].Properties[Value]', 
+         'String'
+        );  
+
+		-- 1.2) conn_DFNB3
+
+        INSERT INTO dbo.[SSIS Configurations]
+        (ConfigurationFilter, 
+         ConfiguredValue, 
+         PackagePath, 
+         ConfiguredValueType
+        )
+        VALUES
+        ('CommonConfigurations', 
+         'Data Source=localhost;Initial Catalog=DFNB3;Provider=SQLNCLI11;Integrated Security=SSPI;', 
+         '\Package.Variables[User::conn_DFNB3].Properties[Value]', 
+         'String'
+        );  
 
 
-    -- 1) Common Configurations
 
-    DELETE FROM dbo.[SSIS Configurations]
-     WHERE ConfigurationFilter = 'CommonConfigurations';
+        -- 2) Solution Level Configurations
+        -- 2.1) LDSBC_IT243_xx  
 
+        DELETE FROM dbo.[SSIS Configurations]
+        WHERE ConfigurationFilter = 'LDSBC_IT243_JM';
 
-    -- 1.1) conn_EXM
+        -- 2.1.1) v_data_share_root
 
-    INSERT INTO dbo.[SSIS Configurations](ConfigurationFilter
-                                        , ConfiguredValue
-                                        , PackagePath
-                                        , ConfiguredValueType)
-    VALUES
-          (
-           'CommonConfigurations'
-         , 'Data Source=localhost;Initial Catalog=EXM;Provider=SQLNCLI11;Integrated Security=SSPI;'
-         , '\Package.Variables[User::conn_EXM].Properties[Value]'
-         , 'String'
-          );
+        INSERT INTO dbo.[SSIS Configurations]
+        (ConfigurationFilter, 
+         ConfiguredValue, 
+         PackagePath, 
+         ConfiguredValueType
+        )
+        VALUES
+        ('LDSBC_IT243_JM', 
+         'C:\Users\Coolest Joseph\Documents\Joseph\Joseph\Data Warehousing\Project\repos\DFNB_src\txt_files\', 
+         '\Package.Variables[User::v_data_share_root].Properties[Value]', 
+         'String'
+        );
 
+        -- 3) Package level configurations
+        -- 3.1) SSIS_PDS_Template_JM
 
+        DELETE FROM dbo.[SSIS Configurations]
+        WHERE ConfigurationFilter = 'SSIS_PDS_Template_JM';
 
+        -- 3.1.1) v_data_share_root
 
-
-    -- 2) Solution Level Configurations
-
-	-- 2.1) LDSBC_IT243_xx  
-	
-	DELETE FROM dbo.[SSIS Configurations]
-     WHERE ConfigurationFilter = 'LDSBC_IT243_xx';
-
-
-
-
-
-    -- 3) Package level configurations
-
-
-    -- 3.1) SSIS_PDS_Template_xx
-
-    DELETE FROM dbo.[SSIS Configurations]
-     WHERE ConfigurationFilter = 'SSIS_PDS_Template_xx';
-	
-
-	-- 3.1.1) v_data_share_root
-
-    INSERT INTO dbo.[SSIS Configurations](ConfigurationFilter
-                                        , ConfiguredValue
-                                        , PackagePath
-                                        , ConfiguredValueType)
-    VALUES
-          (
-           'SSIS_PDS_Template_xx'
-		 , 'C:\Users\z035330\Documents\JJAUSSI\Other\JC\projects\LDSBC\IT_243\repos\DFNB_src\txt_files\'
-         , '\Package.Variables[User::v_data_share_root].Properties[Value]'
-         , 'String'
-          );
-
-
-END;
-
+        INSERT INTO dbo.[SSIS Configurations]
+        (ConfigurationFilter, 
+         ConfiguredValue, 
+         PackagePath, 
+         ConfiguredValueType
+        )
+        VALUES
+        ('SSIS_PDS_Template_JM', 
+         'C:\Users\Coolest Joseph\Documents\Joseph\Joseph\Data Warehousing\Project\repos\DFNB_src\txt_files\', 
+         '\Package.Variables[User::v_data_share_root].Properties[Value]', 
+         'String'
+        );
+    END;
 GO
 
 
