@@ -12,8 +12,8 @@
   DTS:LocaleID="1033"
   DTS:ObjectName="Package"
   DTS:PackageType="5"
-  DTS:VersionBuild="19"
-  DTS:VersionGUID="{4BB4FD20-F79E-42B0-80F5-8288A91CBAE1}">
+  DTS:VersionBuild="20"
+  DTS:VersionGUID="{DC0BAF4B-B185-4DA2-8F3B-A2DBF72015DE}">
   <DTS:Property
     DTS:Name="PackageFormatVersion">8</DTS:Property>
   <DTS:ConnectionManagers>
@@ -146,8 +146,7 @@
       DTS:Namespace="User"
       DTS:ObjectName="v_data_share_root">
       <DTS:VariableValue
-        DTS:DataType="8"
-        xml:space="preserve"></DTS:VariableValue>
+        DTS:DataType="8">C:\Users\Coolest Joseph\Documents\Joseph\Joseph\Data Warehousing\Project\repos\DFNB_src\txt_files\</DTS:VariableValue>
     </DTS:Variable>
   </DTS:Variables>
   <DTS:Executables>

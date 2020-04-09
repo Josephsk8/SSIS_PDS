@@ -31,7 +31,7 @@ SELECT p.PackageID
        INNER JOIN
        dbo.PackageTaskLog AS ptl ON ptl.PackageLogID = pl.PackageLogID
  WHERE 1 = 1
-       --AND BatchLogID = 3
+       AND BatchLogID = 15
  ORDER BY ptl.StartDateTime DESC;
 
 

@@ -123,7 +123,29 @@ Connect strings are loaded with passwords to allow for automation of SSIS ETL ba
          '\Package.Variables[User::v_data_share_root].Properties[Value]', 
          'String'
         );
-    END;
+
+		   -- 3.2) LoadDFNB3_JM
+
+        DELETE FROM dbo.[SSIS Configurations]
+        WHERE ConfigurationFilter = 'LoadDFNB3_JM';
+
+        -- 3.2.1) v_data_share_root
+
+        INSERT INTO dbo.[SSIS Configurations]
+        (ConfigurationFilter, 
+         ConfiguredValue, 
+         PackagePath, 
+         ConfiguredValueType
+        )
+        VALUES
+        ('LoadDFNB3_JM', 
+         'C:\Users\Coolest Joseph\Documents\Joseph\Joseph\Data Warehousing\Project\repos\DFNB_src\txt_files\', 
+         '\Package.Variables[User::v_data_share_root].Properties[Value]', 
+         'String'
+        );
+      
+	  
+	  END;
 GO
 
 
