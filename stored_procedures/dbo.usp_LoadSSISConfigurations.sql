@@ -23,8 +23,11 @@ PURPOSE: Load the SSIS Configurations table
 MODIFICATION LOG:
 Ver      Date        Author           Description
 -------  ----------  ---------------  ------------------------------------------------------------------------
-1.0      11/03/2019  JJAUSSI          1. Created this process for LDS BC IT243
-1.1      02/04/2020  JMueras          1. Added conn_DFNB3
+1.0      11/03/2019  JMueras          1. Created this process for LDS BC IT243
+1.1      02/04/2020  JMueras          1. Added conn_DFNB3 connection configuration
+1.2      02/04/2020  JMueras          1. Added LoadDFNB3_JM configuration
+1.1      02/08/2020  JMueras          1. Added LoadEXM_JM configuration 
+
 
 
 RUNTIME: 
@@ -41,6 +44,13 @@ Loads configuration managers for common configuration managers used in template 
 
 Connect strings are loaded with passwords to allow for automation of SSIS ETL based packages
          
+Example usage...
+
+EXEC dbo.usp_LoadSSISConfigurations;
+
+SELECT c.*
+	FROM dbo.[SSIS Configurations] as c;
+
 ******************************************************************************************************************/
 
         TRUNCATE TABLE dbo.[SSIS Configurations];
@@ -143,7 +153,25 @@ Connect strings are loaded with passwords to allow for automation of SSIS ETL ba
          '\Package.Variables[User::v_data_share_root].Properties[Value]', 
          'String'
         );
-      
+			   -- 3.3) LoadEXM_JM
+
+        DELETE FROM dbo.[SSIS Configurations]
+        WHERE ConfigurationFilter = 'LoadEXM_JM';
+
+        -- 3.2.1) v_data_share_root
+
+        INSERT INTO dbo.[SSIS Configurations]
+        (ConfigurationFilter, 
+         ConfiguredValue, 
+         PackagePath, 
+         ConfiguredValueType
+        )
+        VALUES
+        ('LoadEXM_JM', 
+         'C:\Users\Coolest Joseph\Documents\Joseph\Joseph\Data Warehousing\Project\repos\EXM\txt_files\', 
+         '\Package.Variables[User::v_data_share_root].Properties[Value]', 
+         'String'
+        );
 	  
 	  END;
 GO
